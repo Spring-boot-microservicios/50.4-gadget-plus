@@ -20,4 +20,9 @@ public class OrderEntity {
     @Column(length = 32, nullable = false)
     private String clientName;
 
+    // OneToOne por defecto es Fetch.EAGER
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_bill", nullable = false, unique = true) // Es la union esta entity con la otra tabla
+    private BillEntity bill;
+
 }
