@@ -1,10 +1,8 @@
 package com.angelfg.gadget_plus.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.math.BigDecimal;
 
@@ -22,5 +20,10 @@ public class BillEntity {
 
     @Column(name = "client_rfc", length = 14, nullable = false)
     private String rfc;
+
+    // Se genera la recursividad infinita error: StackOverflowError
+    @ToString.Exclude // va a ignorar el order y evita la recursivdad infinita
+    @OneToOne(mappedBy = "bill", cascade = CascadeType.ALL, fetch = FetchType.EAGER) // nombre de la propiedad quien esta mapeando
+    private OrderEntity order;
 
 }
