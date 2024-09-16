@@ -35,7 +35,8 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// this.billRepository.findAll().forEach(System.out::println);
 
 		// cascadePersist();
-		actualizacionConCascadeMerge();
+		// actualizacionConCascadeMerge();
+		eliminarCascadeDetachOrRemove();
 
 	}
 
@@ -82,6 +83,13 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 		OrderEntity orderUpdated = this.orderRepository.findById(17L).get();
 		System.out.println("POst persist: " + orderUpdated.getClientName());
+	}
+
+	private void eliminarCascadeDetachOrRemove() {
+		// Integramos: @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.REMOVE })
+		// Elimina tanto al hijo como el padre osea: orderEntity y su hijo billEntity
+		OrderEntity order = this.orderRepository.findById(17L).get();
+		this.orderRepository.delete(order);
 	}
 
 }
