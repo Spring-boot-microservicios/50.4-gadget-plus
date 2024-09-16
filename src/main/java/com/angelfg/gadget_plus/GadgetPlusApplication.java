@@ -42,8 +42,9 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// actualizacionConCascadeMerge();
 		// eliminarCascadeDetachOrRemove();
 		// oneToMany();
+		// orephanRemovalAndCascadeDelete();
 
-		orephanRemovalAndCascadeDelete();
+
 	}
 
 	private void cascadePersist() {
