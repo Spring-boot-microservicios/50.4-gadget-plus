@@ -52,7 +52,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// oneToMany();
 		// orephanRemovalAndCascadeDelete();
 
-		relacionesProductsOrdenesYCatalogos();
+		// relacionesProductsOrdenesYCatalogos();
 
 	}
 
