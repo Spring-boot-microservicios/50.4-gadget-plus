@@ -4,13 +4,17 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "orders")
-@Data
+//@Data // no se recomienda usarlo en entities por los proxies
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
+@Getter
+@Setter
+@ToString
 public class OrderEntity {
 
     @Id
@@ -27,8 +31,21 @@ public class OrderEntity {
     // Si el OneToOne contiene FetchType.LAZY se genera un error de tipo: LazyInitializationException
     // Si quiero utilizar el LAZY debo solo utilizar las variables que contiene este modelo y no el de la otra tabla
     // @ToString.Exclude // con el Lazy es para no llamar al ToString de la otra entity y salga el error
-    @OneToOne(fetch = FetchType.EAGER, cascade = { CascadeType.DETACH, CascadeType.REMOVE })
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_bill", nullable = false, unique = true) // Es la union esta entity con la otra tabla
     private BillEntity bill;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrderEntity that = (OrderEntity) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(id);
+    }
 
 }
