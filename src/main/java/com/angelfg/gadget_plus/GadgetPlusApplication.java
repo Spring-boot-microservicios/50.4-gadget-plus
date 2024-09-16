@@ -2,6 +2,7 @@ package com.angelfg.gadget_plus;
 
 import com.angelfg.gadget_plus.entities.BillEntity;
 import com.angelfg.gadget_plus.entities.OrderEntity;
+import com.angelfg.gadget_plus.entities.ProductEntity;
 import com.angelfg.gadget_plus.repositories.BillRepository;
 import com.angelfg.gadget_plus.repositories.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +11,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 @SpringBootApplication
 public class GadgetPlusApplication implements CommandLineRunner {
@@ -37,6 +41,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// cascadePersist();
 		// actualizacionConCascadeMerge();
 		// eliminarCascadeDetachOrRemove();
+		oneToMany();
 
 	}
 
@@ -90,6 +95,27 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// Elimina tanto al hijo como el padre osea: orderEntity y su hijo billEntity
 		OrderEntity order = this.orderRepository.findById(17L).get();
 		this.orderRepository.delete(order);
+	}
+
+	private void oneToMany() {
+		OrderEntity order = this.orderRepository.findById(1L).orElseThrow();
+
+		ProductEntity product1 = ProductEntity.builder()
+				.quantity(BigInteger.ONE)
+				.build();
+
+		ProductEntity product2 = ProductEntity.builder()
+				.quantity(BigInteger.TWO)
+				.build();
+
+		Set<ProductEntity> products = Set.of(product1, product2);
+		order.setProducts(products);
+
+		// HAsta este punto no me generaria las relaciones, ya que debemos
+		// mostrarle a los products que orden va a tener con un forEach
+
+		products.forEach(product -> product.setOrder(order));
+		this.orderRepository.save(order);
 	}
 
 }
