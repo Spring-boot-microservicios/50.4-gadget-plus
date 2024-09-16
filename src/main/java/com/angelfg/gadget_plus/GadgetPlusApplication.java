@@ -2,9 +2,12 @@ package com.angelfg.gadget_plus;
 
 import com.angelfg.gadget_plus.entities.BillEntity;
 import com.angelfg.gadget_plus.entities.OrderEntity;
+import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
 import com.angelfg.gadget_plus.entities.ProductEntity;
 import com.angelfg.gadget_plus.repositories.BillRepository;
 import com.angelfg.gadget_plus.repositories.OrderRepository;
+import com.angelfg.gadget_plus.repositories.ProductCatalogRepository;
+import com.angelfg.gadget_plus.repositories.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -13,7 +16,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 
 @SpringBootApplication
@@ -24,6 +26,12 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 	@Autowired
 	private BillRepository billRepository;
+
+	@Autowired
+	private ProductRepository productRepository;
+
+	@Autowired
+	private ProductCatalogRepository productCatalogRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(GadgetPlusApplication.class, args);
@@ -44,6 +52,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// oneToMany();
 		// orephanRemovalAndCascadeDelete();
 
+		relacionesProductsOrdenesYCatalogos();
 
 	}
 
@@ -140,6 +149,31 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		order.getProducts().remove(productEntity);
 
 		// La soluciones es que en ProductEntity quitemos el Cascade de tipo ALL
+
+		this.orderRepository.save(order);
+	}
+
+	private void relacionesProductsOrdenesYCatalogos() {
+		 // this.productCatalogRepository.findAll().forEach(System.out::println);
+		ProductCatalogEntity productCatalog1 = this.productCatalogRepository.findAll().get(0);
+		ProductCatalogEntity productCatalog2 = this.productCatalogRepository.findAll().get(4);
+		ProductCatalogEntity productCatalog3 = this.productCatalogRepository.findAll().get(7);
+
+		OrderEntity order = this.orderRepository.findById(1L).orElseThrow();
+
+		ProductEntity product1 = ProductEntity.builder().quantity(BigInteger.ONE).build();
+		ProductEntity product2 = ProductEntity.builder().quantity(BigInteger.TWO).build();
+		ProductEntity product3 = ProductEntity.builder().quantity(BigInteger.TEN).build();
+
+		Set<ProductEntity> products = Set.of(product1, product2, product3);
+
+		product1.setCatalog(productCatalog1);
+		product2.setCatalog(productCatalog2);
+		product3.setCatalog(productCatalog3);
+
+		order.setProducts(products);
+
+		products.forEach(product -> product.setOrder(order));
 
 		this.orderRepository.save(order);
 	}

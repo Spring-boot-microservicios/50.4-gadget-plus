@@ -27,4 +27,8 @@ public class ProductEntity {
     @JoinColumn(name = "id_order") // Nombre de la relacion de la Base de datos, tal cual como se llama
     private OrderEntity order;
 
+    @OneToOne(cascade = CascadeType.ALL) // Para hacer la persistencia en cascada
+    @JoinColumn(name = "id_product_catalog")
+    private ProductCatalogEntity catalog;
+
 }
