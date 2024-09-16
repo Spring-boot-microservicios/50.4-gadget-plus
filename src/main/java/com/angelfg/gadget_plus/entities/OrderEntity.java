@@ -4,7 +4,9 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name = "orders")
@@ -34,6 +36,14 @@ public class OrderEntity {
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "id_bill", nullable = false, unique = true) // Es la union esta entity con la otra tabla
     private BillEntity bill;
+
+    // Nombre del atributo de la relacion: private OrderEntity order; de ProductEntity
+    @OneToMany(
+        mappedBy = "order",
+        fetch = FetchType.EAGER,
+        cascade = CascadeType.ALL
+    )
+    private Set<ProductEntity> products = new HashSet<>();
 
     @Override
     public boolean equals(Object o) {
