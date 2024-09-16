@@ -21,7 +21,9 @@ public class ProductEntity {
 
     private BigInteger quantity;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    // El producto que remuevo con el ALL hace la eliminacion al order -> product -> order -> [products]
+    // El conflicto esta en esto quitar el cascade = CascadeType.ALL
+    @ManyToOne
     @JoinColumn(name = "id_order") // Nombre de la relacion de la Base de datos, tal cual como se llama
     private OrderEntity order;
 

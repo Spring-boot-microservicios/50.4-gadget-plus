@@ -41,7 +41,8 @@ public class OrderEntity {
     @OneToMany(
         mappedBy = "order",
         fetch = FetchType.EAGER,
-        cascade = CascadeType.ALL
+        cascade = CascadeType.ALL,
+        orphanRemoval = true // Desvinculo una orden de un producto, elimina el registro del producto
     )
     private Set<ProductEntity> products = new HashSet<>();
 

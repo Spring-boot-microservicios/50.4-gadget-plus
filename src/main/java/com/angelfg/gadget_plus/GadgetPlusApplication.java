@@ -41,8 +41,9 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// cascadePersist();
 		// actualizacionConCascadeMerge();
 		// eliminarCascadeDetachOrRemove();
-		oneToMany();
+		// oneToMany();
 
+		orephanRemovalAndCascadeDelete();
 	}
 
 	private void cascadePersist() {
@@ -108,13 +109,37 @@ public class GadgetPlusApplication implements CommandLineRunner {
 				.quantity(BigInteger.TWO)
 				.build();
 
-		Set<ProductEntity> products = Set.of(product1, product2);
+		ProductEntity product3 = ProductEntity.builder()
+				.quantity(BigInteger.TEN)
+				.build();
+
+		Set<ProductEntity> products = Set.of(product1, product2, product3);
 		order.setProducts(products);
 
 		// HAsta este punto no me generaria las relaciones, ya que debemos
 		// mostrarle a los products que orden va a tener con un forEach
 
-		products.forEach(product -> product.setOrder(order));
+		products.forEach(product -> product.setOrder(order)); // relacion inversa
+		this.orderRepository.save(order);
+	}
+
+	private void orephanRemovalAndCascadeDelete() {
+		OrderEntity order = this.orderRepository.findById(1L).orElseThrow();
+
+		// Eliminar el primer elemento
+		//  @OneToMany(
+		//        mappedBy = "order",
+		//        fetch = FetchType.EAGER,
+		//        cascade = CascadeType.ALL,
+		//        orphanRemoval = true
+		//    )
+		// Aqui lo que pasa es que elimina todos los elementos por el
+		// cascade = CascadeType.ALL y el orphanRemoval = true
+		ProductEntity productEntity = order.getProducts().stream().findFirst().orElseThrow();
+		order.getProducts().remove(productEntity);
+
+		// La soluciones es que en ProductEntity quitemos el Cascade de tipo ALL
+
 		this.orderRepository.save(order);
 	}
 
