@@ -57,7 +57,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 		// manyToMany(); // solo una vez insertado ya no volver a poblar la DB
 
-		insertandoRegistrosAleatorios();
+		// insertandoRegistrosAleatorios();
 
 	}
 
