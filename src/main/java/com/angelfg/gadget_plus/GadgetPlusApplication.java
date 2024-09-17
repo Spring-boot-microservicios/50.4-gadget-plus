@@ -1,13 +1,7 @@
 package com.angelfg.gadget_plus;
 
-import com.angelfg.gadget_plus.entities.BillEntity;
-import com.angelfg.gadget_plus.entities.OrderEntity;
-import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
-import com.angelfg.gadget_plus.entities.ProductEntity;
-import com.angelfg.gadget_plus.repositories.BillRepository;
-import com.angelfg.gadget_plus.repositories.OrderRepository;
-import com.angelfg.gadget_plus.repositories.ProductCatalogRepository;
-import com.angelfg.gadget_plus.repositories.ProductRepository;
+import com.angelfg.gadget_plus.entities.*;
+import com.angelfg.gadget_plus.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,6 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.Set;
 
 @SpringBootApplication
@@ -32,6 +27,9 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 	@Autowired
 	private ProductCatalogRepository productCatalogRepository;
+
+	@Autowired
+	private CategoryRepository categoryRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(GadgetPlusApplication.class, args);
@@ -53,6 +51,8 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// orephanRemovalAndCascadeDelete();
 
 		// relacionesProductsOrdenesYCatalogos();
+
+		manyToMany();
 
 	}
 
@@ -176,6 +176,33 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		products.forEach(product -> product.setOrder(order));
 
 		this.orderRepository.save(order);
+	}
+
+	private void manyToMany() {
+		final CategoryEntity HOME = this.categoryRepository.findById(1L).orElseThrow();
+		final CategoryEntity OFFICE = this.categoryRepository.findById(2L).orElseThrow();
+
+		this.productCatalogRepository.findAll().forEach(product -> {
+
+			if (product.getDescription().contains("home")) {
+				product.addCategory(HOME);
+			}
+
+			if (product.getDescription().contains("office")) {
+				product.addCategory(OFFICE);
+			}
+
+			this.productCatalogRepository.save(product);
+		});
+
+		// -- Muchos a muchos tabla de rompimiento
+		//select * from product_join_category pjc;
+		//select * from categories c;
+		//select * from products_catalog pc;
+		//
+		//select * from products_catalog pc
+		//	inner join product_join_category pjc on pc.id  = pjc.id_product
+		//	inner join categories c on c.id = pjc.id_category;
 	}
 
 }

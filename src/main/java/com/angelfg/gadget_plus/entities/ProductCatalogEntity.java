@@ -5,6 +5,8 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
@@ -37,5 +39,28 @@ public class ProductCatalogEntity {
     private LocalDate launchingDate;
     private Boolean isDiscount;
     private Short rating;
+
+
+    // Muchos a muchos genera una tabla
+    // No poder en CascadeType.ALL, no usar el CascadeType.REMOVE
+    @ManyToMany(
+        fetch = FetchType.EAGER,
+        cascade = {
+            CascadeType.PERSIST,
+            CascadeType.MERGE,
+            CascadeType.DETACH,
+            CascadeType.REFRESH
+        }
+    )
+    @JoinTable(
+        name = "product_join_category",
+        joinColumns = @JoinColumn(name = "id_product"),
+        inverseJoinColumns = @JoinColumn(name = "id_category")
+    )
+    private List<CategoryEntity> categories = new LinkedList<>();
+
+    public void addCategory(CategoryEntity category) {
+        this.categories.add(category);
+    }
 
 }
