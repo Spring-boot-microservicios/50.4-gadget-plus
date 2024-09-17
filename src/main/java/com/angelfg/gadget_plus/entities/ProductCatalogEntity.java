@@ -47,7 +47,7 @@ public class ProductCatalogEntity {
         fetch = FetchType.EAGER,
         cascade = {
             CascadeType.PERSIST,
-            CascadeType.MERGE,
+            // CascadeType.MERGE, // Conflicto con Multiple representations of the same entity are being merged o quitar todo el cascade
             CascadeType.DETACH,
             CascadeType.REFRESH
         }

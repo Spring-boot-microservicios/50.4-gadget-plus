@@ -52,7 +52,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 		// relacionesProductsOrdenesYCatalogos();
 
-		manyToMany();
+		// manyToMany(); // solo una vez insertado ya no volver a poblar la DB
 
 	}
 
