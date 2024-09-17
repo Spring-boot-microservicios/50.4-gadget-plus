@@ -10,8 +10,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.LinkedList;
 import java.util.Optional;
+import java.util.Random;
 import java.util.Set;
+import java.util.stream.IntStream;
 
 @SpringBootApplication
 public class GadgetPlusApplication implements CommandLineRunner {
@@ -53,6 +56,8 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// relacionesProductsOrdenesYCatalogos();
 
 		// manyToMany(); // solo una vez insertado ya no volver a poblar la DB
+
+		insertandoRegistrosAleatorios();
 
 	}
 
@@ -203,6 +208,32 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		//select * from products_catalog pc
 		//	inner join product_join_category pjc on pc.id  = pjc.id_product
 		//	inner join categories c on c.id = pjc.id_category;
+	}
+
+	private void insertandoRegistrosAleatorios() {
+		Random random = new Random();
+
+		// random.nextInt(16) => 0 y 15 hace con el 16
+
+		// Uso de LinkedList para usarlo como cola
+		LinkedList<ProductCatalogEntity> productsCatalog = new LinkedList<>(this.productCatalogRepository.findAll());
+
+		// for (int i = 0; i < productsCatalog.size(); i++) {}
+		IntStream.range(0, productsCatalog.size()).forEach(i -> {
+			Long idOrderRandom = random.nextLong(16) + 1;
+			OrderEntity orderRandom = this.orderRepository.findById(idOrderRandom).orElseThrow();
+
+			ProductEntity product = ProductEntity.builder()
+					.quantity(BigInteger.valueOf(random.nextInt(5) + 1))
+					.catalog(productsCatalog.poll()) // poll() elimina y extrae el elemento de la cola
+					.build();
+
+			orderRandom.addProduct(product);
+			product.setOrder(orderRandom);
+
+			this.orderRepository.save(orderRandom);
+		});
+
 	}
 
 }

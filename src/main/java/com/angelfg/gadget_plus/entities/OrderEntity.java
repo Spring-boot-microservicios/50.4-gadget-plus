@@ -46,6 +46,10 @@ public class OrderEntity {
     )
     private Set<ProductEntity> products = new HashSet<>();
 
+    public void addProduct(ProductEntity product) {
+        this.products.add(product);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
