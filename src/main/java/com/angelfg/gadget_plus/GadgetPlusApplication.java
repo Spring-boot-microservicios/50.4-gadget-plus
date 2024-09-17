@@ -34,6 +34,9 @@ public class GadgetPlusApplication implements CommandLineRunner {
 	@Autowired
 	private CategoryRepository categoryRepository;
 
+	@Autowired
+	private RejectProductRepository rejectProductRepository;
+
 	public static void main(String[] args) {
 		SpringApplication.run(GadgetPlusApplication.class, args);
 	}
@@ -59,6 +62,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 		// insertandoRegistrosAleatorios();
 
+		mapeoLlaveCompuesta();
 	}
 
 	private void cascadePersist() {
@@ -234,6 +238,10 @@ public class GadgetPlusApplication implements CommandLineRunner {
 			this.orderRepository.save(orderRandom);
 		});
 
+	}
+
+	private void mapeoLlaveCompuesta() {
+		this.rejectProductRepository.findAll().forEach(System.out::println);
 	}
 
 }
