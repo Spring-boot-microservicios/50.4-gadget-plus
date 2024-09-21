@@ -62,7 +62,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 		// insertandoRegistrosAleatorios();
 
-		mapeoLlaveCompuesta();
+		// mapeoLlaveCompuesta();
 	}
 
 	private void cascadePersist() {

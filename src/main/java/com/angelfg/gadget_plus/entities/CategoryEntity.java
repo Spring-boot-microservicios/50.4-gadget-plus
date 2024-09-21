@@ -1,5 +1,6 @@
 package com.angelfg.gadget_plus.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -27,6 +28,7 @@ public class CategoryEntity {
     // Se mapea con la propiedad de private List<CategoryEntity> categories; de ProductCatalogEntity
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "categories")
     @ToString.Exclude // Evitar recursividad infinita
+    @JsonIgnore // Evitar recursividad infinita
     private List<ProductCatalogEntity> productsCatalog;
 
 }
