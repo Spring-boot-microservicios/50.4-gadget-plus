@@ -42,7 +42,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public List<ProductCatalogEntity> findByCategoryId(Long id) {
-        return List.of();
+        return this.productCatalogRepository.getByCategory(id);
     }
 
     @Override

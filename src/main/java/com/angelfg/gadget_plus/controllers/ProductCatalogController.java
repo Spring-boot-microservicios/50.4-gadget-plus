@@ -52,4 +52,9 @@ public class ProductCatalogController {
         return ResponseEntity.ok(this.productCatalogService.findPriceBetween(min, max));
     }
 
+    @GetMapping(path = "category")
+    public ResponseEntity<List<ProductCatalogEntity>> getByCategory(@RequestParam Long id) {
+        return ResponseEntity.ok(this.productCatalogService.findByCategoryId(id));
+    }
+
 }
