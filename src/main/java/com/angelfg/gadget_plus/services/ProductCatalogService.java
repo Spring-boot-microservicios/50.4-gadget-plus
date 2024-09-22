@@ -1,9 +1,11 @@
 package com.angelfg.gadget_plus.services;
 
 import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
+import com.angelfg.gadget_plus.enums.DateEval;
 import org.springframework.data.domain.Page;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,7 +15,7 @@ public interface ProductCatalogService {
     List<ProductCatalogEntity> findNameLike(String key);
     List<ProductCatalogEntity> findPriceBetween(BigDecimal min, BigDecimal max);
     List<ProductCatalogEntity> findByCategoryId(Long id);
-//    List<ProductCatalogEntity> findByLaunchingDate(LocalDate date, DateEval key);
+    List<ProductCatalogEntity> findByLaunchingDate(LocalDate date, DateEval key);
     List<ProductCatalogEntity> findByBrandAndRating(String brand, Short rating);
 //    List<ReportProduct> makeReport();
 

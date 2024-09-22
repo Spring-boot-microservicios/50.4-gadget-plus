@@ -1,6 +1,7 @@
 package com.angelfg.gadget_plus.controllers;
 
 import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
+import com.angelfg.gadget_plus.enums.DateEval;
 import com.angelfg.gadget_plus.enums.LikeKey;
 import com.angelfg.gadget_plus.services.ProductCatalogService;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,6 +57,11 @@ public class ProductCatalogController {
     @GetMapping(path = "category")
     public ResponseEntity<List<ProductCatalogEntity>> getByCategory(@RequestParam Long id) {
         return ResponseEntity.ok(this.productCatalogService.findByCategoryId(id));
+    }
+
+    @GetMapping(path = "date-launch/{key}")
+    public ResponseEntity<List<ProductCatalogEntity>> getByDate(@PathVariable DateEval key, @RequestParam LocalDate date) {
+        return ResponseEntity.ok(this.productCatalogService.findByLaunchingDate(date, key));
     }
 
 }
