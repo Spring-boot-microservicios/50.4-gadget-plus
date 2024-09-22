@@ -98,4 +98,9 @@ public class ProductCatalogController {
         return ResponseEntity.ok(this.productCatalogService.findAllByBrand(brand, page));
     }
 
+    @GetMapping(path = "brand-count/{brand}")
+    public ResponseEntity<Integer> getCountByBrand(@PathVariable String brand) {
+        return ResponseEntity.ok(this.productCatalogService.countByBrand(brand));
+    }
+
 }
