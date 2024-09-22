@@ -1,14 +1,13 @@
 package com.angelfg.gadget_plus.controllers;
 
 import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
+import com.angelfg.gadget_plus.enums.LikeKey;
 import com.angelfg.gadget_plus.services.ProductCatalogService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +25,25 @@ public class ProductCatalogController {
     @GetMapping(path = "name/{name}")
     public ResponseEntity<ProductCatalogEntity> getByName(@PathVariable String name) {
         return ResponseEntity.ok(this.productCatalogService.findByName(name));
+    }
+
+    @GetMapping(path = "like/{key}")
+    public ResponseEntity<List<ProductCatalogEntity>> getByNameLike(@PathVariable LikeKey key, @RequestParam String word) {
+        final String placeholder = "%";
+
+        if (key.equals(LikeKey.AFTER)) {
+            return ResponseEntity.ok(this.productCatalogService.findNameLike(placeholder + word));
+        }
+
+        if (key.equals(LikeKey.BEFORE)) {
+            return ResponseEntity.ok(this.productCatalogService.findNameLike(word + placeholder));
+        }
+
+        if (key.equals(LikeKey.BETWEEN)) {
+            return ResponseEntity.ok(this.productCatalogService.findNameLike(placeholder + word + placeholder));
+        }
+
+        return ResponseEntity.badRequest().build();
     }
 
 }

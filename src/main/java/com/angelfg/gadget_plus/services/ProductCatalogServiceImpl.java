@@ -32,7 +32,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public List<ProductCatalogEntity> findNameLike(String key) {
-        return List.of();
+        return this.productCatalogRepository.findByNameLike(key);
     }
 
     @Override
