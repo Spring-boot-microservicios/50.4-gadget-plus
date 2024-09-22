@@ -64,4 +64,9 @@ public class ProductCatalogController {
         return ResponseEntity.ok(this.productCatalogService.findByLaunchingDate(date, key));
     }
 
+    @GetMapping(path = "brand-rating")
+    public ResponseEntity<List<ProductCatalogEntity>> getByBrandAndRating(@RequestParam String brand, @RequestParam Short rating) {
+        return ResponseEntity.ok(this.productCatalogService.findByBrandAndRating(brand, rating));
+    }
+
 }

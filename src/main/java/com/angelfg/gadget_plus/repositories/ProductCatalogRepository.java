@@ -26,4 +26,6 @@ public interface ProductCatalogRepository extends JpaRepository<ProductCatalogEn
 
     List<ProductCatalogEntity> findByLaunchingDateAfter(LocalDate date);
 
+    List<ProductCatalogEntity> findByBrandAndRatingGreaterThan(String brand, Short rating);
+
 }
