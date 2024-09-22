@@ -28,4 +28,6 @@ public interface ProductCatalogRepository extends JpaRepository<ProductCatalogEn
 
     List<ProductCatalogEntity> findByBrandAndRatingGreaterThan(String brand, Short rating);
 
+    List<ProductCatalogEntity> findByBrandOrRatingGreaterThan(String brand, Short rating);
+
 }
