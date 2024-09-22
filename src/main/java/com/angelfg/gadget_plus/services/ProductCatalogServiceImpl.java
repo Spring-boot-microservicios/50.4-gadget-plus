@@ -25,6 +25,7 @@ import java.util.UUID;
 public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     private static final int PAGE_SIZE = 5;
+    private static final int MIN_PAGE_SIZE = 2;
 
     private final ProductCatalogRepository productCatalogRepository;
 
@@ -97,8 +98,8 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     }
 
     @Override
-    public Page<ProductCatalogEntity> findAllByBrand(String brand) {
-        return null;
+    public Page<ProductCatalogEntity> findAllByBrand(String brand, Integer page) {
+        return this.productCatalogRepository.findAllByBrand(brand, PageRequest.of(page, MIN_PAGE_SIZE));
     }
 
     @Override

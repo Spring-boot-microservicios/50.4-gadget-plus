@@ -90,4 +90,12 @@ public class ProductCatalogController {
         return ResponseEntity.ok(this.productCatalogService.findAll(field, desc, page));
     }
 
+    @GetMapping(path = "allByBrand")
+    public ResponseEntity<Page<ProductCatalogEntity>> getAllByBrand(
+        @RequestParam String brand,
+        @RequestParam Integer page
+    ) {
+        return ResponseEntity.ok(this.productCatalogService.findAllByBrand(brand, page));
+    }
+
 }
