@@ -9,8 +9,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 
+// Generando indice para busqueda mas frecuentes en product_name
+// create index idx_product_name on products_catalog (product_name);
+
 @Entity(name = "productCatalog")
-@Table(name = "products_catalog")
+@Table(name = "products_catalog", indexes = {
+    @Index(name = "idx_product_name", columnList = "product_name")
+})
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
