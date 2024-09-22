@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,6 +45,11 @@ public class ProductCatalogController {
         }
 
         return ResponseEntity.badRequest().build();
+    }
+
+    @GetMapping(path = "between")
+    public ResponseEntity<List<ProductCatalogEntity>> getPriceBetween(@RequestParam BigDecimal min, @RequestParam BigDecimal max) {
+        return ResponseEntity.ok(this.productCatalogService.findPriceBetween(min, max));
     }
 
 }
