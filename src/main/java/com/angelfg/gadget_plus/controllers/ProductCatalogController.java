@@ -84,7 +84,7 @@ public class ProductCatalogController {
     @GetMapping(path = "all")
     public ResponseEntity<Page<ProductCatalogEntity>> getAll(
         @RequestParam(required = false) String field,
-        @RequestParam(required = false) Boolean desc,
+        @RequestParam(required = true) Boolean desc,
         @RequestParam(required = true) Integer page
     ) {
         return ResponseEntity.ok(this.productCatalogService.findAll(field, desc, page));

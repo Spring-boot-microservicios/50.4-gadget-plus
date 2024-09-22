@@ -8,12 +8,14 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Slf4j
@@ -77,7 +79,21 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public Page<ProductCatalogEntity> findAll(String field, Boolean desc, Integer page) {
-        return this.productCatalogRepository.findAll(PageRequest.of(page, PAGE_SIZE));
+        Sort sorting = Sort.by("name");
+
+        if (Objects.nonNull(field)) {
+            switch (field) {
+                case "brand" -> sorting = Sort.by("brand");
+                case "price" -> sorting = Sort.by("price");
+                case "launchingDate" -> sorting = Sort.by("launchingDate");
+                case "rating" -> sorting = Sort.by("rating");
+                default -> throw new IllegalArgumentException("Invalid field: " + field);
+            }
+        }
+
+        return (desc)
+                ? this.productCatalogRepository.findAll(PageRequest.of(page, PAGE_SIZE, sorting.descending()))
+                : this.productCatalogRepository.findAll(PageRequest.of(page, PAGE_SIZE, sorting.ascending()));
     }
 
     @Override
