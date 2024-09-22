@@ -1,5 +1,6 @@
 package com.angelfg.gadget_plus.controllers;
 
+import com.angelfg.gadget_plus.dtos.ReportProduct;
 import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
 import com.angelfg.gadget_plus.enums.DateEval;
 import com.angelfg.gadget_plus.enums.LikeKey;
@@ -72,6 +73,11 @@ public class ProductCatalogController {
     @GetMapping(path = "brand-rating-or")
     public ResponseEntity<List<ProductCatalogEntity>> getByBrandAndRatingOr(@RequestParam String brand, @RequestParam Short rating) {
         return ResponseEntity.ok(this.productCatalogService.findByBrandOrRating(brand, rating));
+    }
+
+    @GetMapping(path = "report")
+    public ResponseEntity<List<ReportProduct>> getReport() {
+        return ResponseEntity.ok(this.productCatalogService.makeReport());
     }
 
 }

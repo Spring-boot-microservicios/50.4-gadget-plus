@@ -1,5 +1,6 @@
 package com.angelfg.gadget_plus.services;
 
+import com.angelfg.gadget_plus.dtos.ReportProduct;
 import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
 import com.angelfg.gadget_plus.enums.DateEval;
 import com.angelfg.gadget_plus.repositories.ProductCatalogRepository;
@@ -64,6 +65,11 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
     @Override
     public List<ProductCatalogEntity> findByBrandOrRating(String brand, Short rating) {
         return this.productCatalogRepository.findByBrandOrRatingGreaterThan(brand, rating);
+    }
+
+    @Override
+    public List<ReportProduct> makeReport() {
+        return this.productCatalogRepository.findAndMakeReport();
     }
 
     @Override

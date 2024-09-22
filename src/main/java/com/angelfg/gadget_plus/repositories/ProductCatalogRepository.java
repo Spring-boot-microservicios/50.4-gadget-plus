@@ -1,5 +1,6 @@
 package com.angelfg.gadget_plus.repositories;
 
+import com.angelfg.gadget_plus.dtos.ReportProduct;
 import com.angelfg.gadget_plus.entities.ProductCatalogEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,5 +30,13 @@ public interface ProductCatalogRepository extends JpaRepository<ProductCatalogEn
     List<ProductCatalogEntity> findByBrandAndRatingGreaterThan(String brand, Short rating);
 
     List<ProductCatalogEntity> findByBrandOrRatingGreaterThan(String brand, Short rating);
+
+    @Query("select new com.angelfg.gadget_plus.dtos.ReportProduct(" +
+            "pc.brand, " +
+            "avg(pc.price), " +
+            "sum(pc.price)) " +
+            "from productCatalog pc " +
+            "group by pc.brand")
+    List<ReportProduct> findAndMakeReport();
 
 }
