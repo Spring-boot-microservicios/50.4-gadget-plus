@@ -23,4 +23,9 @@ public class ProductCatalogController {
         return ResponseEntity.ok(this.productCatalogService.findById(UUID.fromString(id)));
     }
 
+    @GetMapping(path = "name/{name}")
+    public ResponseEntity<ProductCatalogEntity> getByName(@PathVariable String name) {
+        return ResponseEntity.ok(this.productCatalogService.findByName(name));
+    }
+
 }

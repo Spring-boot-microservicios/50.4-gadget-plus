@@ -32,7 +32,7 @@ public class ProductCatalogEntity {
     private String name;
 
     @Column(name = "brand_name", length = 64)
-    private String brad;
+    private String brand;
 
     private String description;
     private BigDecimal price;
