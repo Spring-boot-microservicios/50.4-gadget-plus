@@ -7,6 +7,7 @@ import com.angelfg.gadget_plus.repositories.ProductCatalogRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +21,8 @@ import java.util.UUID;
 @RequiredArgsConstructor// (onConstructor = @__(@Autowired)) no es necesario
 @Transactional(readOnly = true)
 public class ProductCatalogServiceImpl implements ProductCatalogService {
+
+    private static final int PAGE_SIZE = 5;
 
     private final ProductCatalogRepository productCatalogRepository;
 
@@ -74,7 +77,7 @@ public class ProductCatalogServiceImpl implements ProductCatalogService {
 
     @Override
     public Page<ProductCatalogEntity> findAll(String field, Boolean desc, Integer page) {
-        return null;
+        return this.productCatalogRepository.findAll(PageRequest.of(page, PAGE_SIZE));
     }
 
     @Override
