@@ -2,6 +2,7 @@ package com.angelfg.gadget_plus;
 
 import com.angelfg.gadget_plus.entities.*;
 import com.angelfg.gadget_plus.repositories.*;
+import com.angelfg.gadget_plus.services.CatalogBatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,6 +38,9 @@ public class GadgetPlusApplication implements CommandLineRunner {
 	@Autowired
 	private RejectProductRepository rejectProductRepository;
 
+	@Autowired
+	private CatalogBatch catalogBatch;
+
 	public static void main(String[] args) {
 		SpringApplication.run(GadgetPlusApplication.class, args);
 	}
@@ -63,6 +67,9 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// insertandoRegistrosAleatorios();
 
 		// mapeoLlaveCompuesta();
+
+		// Para la insercion y eliminacion de grandes cantidades
+		// procesosBatch();
 	}
 
 	private void cascadePersist() {
@@ -242,6 +249,14 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 	private void mapeoLlaveCompuesta() {
 		this.rejectProductRepository.findAll().forEach(System.out::println);
+	}
+
+	private void procesosBatch() throws InterruptedException {
+		this.catalogBatch.insertBatch();
+
+		Thread.sleep(10000);
+
+		this.catalogBatch.deleteBatch();
 	}
 
 }
