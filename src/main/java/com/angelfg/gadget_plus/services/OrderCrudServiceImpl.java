@@ -39,7 +39,12 @@ public class OrderCrudServiceImpl implements OrderCrudService {
 
     @Override
     public OrderDTO update(OrderDTO order, Long id) {
-        return null;
+        final OrderEntity toUpdate = this.orderRepository.findById(id).orElseThrow();
+
+        toUpdate.setClientName(order.getClientName());
+        toUpdate.getBill().setClientRfc(order.getBill().getClientRfc());
+
+        return this.mapOrderFromEntity(this.orderRepository.save(toUpdate));
     }
 
     @Override
