@@ -7,4 +7,5 @@ public interface OrderCrudService {
     OrderDTO read(Long id);
     OrderDTO update(OrderDTO order, Long id);
     void delete(Long id);
+    void delete(String clientName);
 }

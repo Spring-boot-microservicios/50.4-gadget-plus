@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -21,6 +23,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @Slf4j
 @RequiredArgsConstructor
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class OrderCrudServiceImpl implements OrderCrudService {
 
     private final OrderRepository orderRepository;
@@ -50,6 +53,15 @@ public class OrderCrudServiceImpl implements OrderCrudService {
     @Override
     public void delete(Long id) {
 
+    }
+
+    @Override
+    public void delete(String clientName) {
+        if (this.orderRepository.existsByClientName(clientName)) {
+            this.orderRepository.deleteByClientName(clientName);
+        } else {
+            throw new IllegalArgumentException("Client not exist");
+        }
     }
 
     private OrderDTO mapOrderFromEntity(OrderEntity orderEntity) {

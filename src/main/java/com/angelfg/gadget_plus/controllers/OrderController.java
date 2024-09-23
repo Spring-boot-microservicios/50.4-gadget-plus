@@ -31,4 +31,10 @@ public class OrderController {
         return ResponseEntity.ok(this.orderCrudService.update(orderDTO, id));
     }
 
+    @DeleteMapping
+    public ResponseEntity<Void> deleteByName(@RequestParam String name) {
+        this.orderCrudService.delete(name);
+        return ResponseEntity.noContent().build();
+    }
+
 }
