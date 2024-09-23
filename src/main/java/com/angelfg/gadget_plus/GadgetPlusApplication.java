@@ -71,7 +71,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 		// porque aun no existe el registro guardado de bill
 		BillEntity bill = BillEntity.builder()
 				.id("b-17")
-				.rfc("ASCSASD897")
+				.clientRfc("ASCSASD897")
 				.totalAmount(BigDecimal.TEN)
 				.build();
 
@@ -102,7 +102,7 @@ public class GadgetPlusApplication implements CommandLineRunner {
 
 		// CascadeType.PERSIST => es para los save
 		// CascadeType.MERGE => es para los updates
-		order.getBill().setRfc("AAACCC");
+		order.getBill().setClientRfc("AAACCC");
 
 		this.orderRepository.save(order);
 

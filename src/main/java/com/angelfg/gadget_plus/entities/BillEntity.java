@@ -25,7 +25,7 @@ public class BillEntity {
     private BigDecimal totalAmount;
 
     @Column(name = "client_rfc", length = 14, nullable = false)
-    private String rfc;
+    private String clientRfc;
 
     // Se genera la recursividad infinita error: StackOverflowError
     @ToString.Exclude // va a ignorar el order y evita la recursivdad infinita
