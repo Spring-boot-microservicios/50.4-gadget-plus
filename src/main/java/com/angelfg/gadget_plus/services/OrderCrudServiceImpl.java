@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class OrderCrudServiceImpl implements OrderCrudService {
 
     private final OrderRepository orderRepository;
@@ -52,9 +51,18 @@ public class OrderCrudServiceImpl implements OrderCrudService {
 
     @Override
     public void delete(Long id) {
+        // Otra forma de eliminar
+        // var toDelete = this.orderRepository.findById(id).orElseThrow();
+        // this.orderRepository.delete(toDelete);
 
+        if (this.orderRepository.existsById(id)) {
+            this.orderRepository.deleteById(id);
+        } else {
+            throw new IllegalArgumentException("Client not exist");
+        }
     }
 
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void delete(String clientName) {
         if (this.orderRepository.existsByClientName(clientName)) {

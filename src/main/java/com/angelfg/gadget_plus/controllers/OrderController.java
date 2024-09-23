@@ -37,4 +37,10 @@ public class OrderController {
         return ResponseEntity.noContent().build();
     }
 
+    @DeleteMapping(path = "{id}")
+    public ResponseEntity<Void> delete(@PathVariable Long id) {
+        this.orderCrudService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }
