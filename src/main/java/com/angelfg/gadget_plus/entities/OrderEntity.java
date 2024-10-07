@@ -81,10 +81,17 @@ public class OrderEntity {
     // Despues de guardar en DB
     @PostPersist
     public void postPersist() {
-        this.setCreatedAt(LocalDateTime.now());
         log.info("Post persist {}", this.getIsSaved());
         this.setIsSaved(true);
         log.info("Post persist {}", this.getIsSaved());
+    }
+
+    // Antes de actualizar en DB
+    @PreUpdate
+    public void preUpdate() {
+        this.setLastUpdated(LocalDateTime.now());
+        log.info("Pre update {}", this.getLastUpdated().toString());
+
     }
 
 }
