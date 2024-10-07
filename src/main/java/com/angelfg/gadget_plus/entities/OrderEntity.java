@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -91,7 +92,25 @@ public class OrderEntity {
     public void preUpdate() {
         this.setLastUpdated(LocalDateTime.now());
         log.info("Pre update {}", this.getLastUpdated().toString());
+    }
 
+    // Despues de actualizar en DB
+    @PostUpdate
+    private void postUpdate() {
+        log.info("Post update {}", this.getLastUpdated().toString());
+    }
+
+    // Antes de eliminar
+    @PreRemove
+    private void preRemove() {
+        log.warn("Entity will be removed");
+        this.products = new HashSet<>();
+    }
+
+    // Despues de eliminar
+    @PostRemove
+    private void postRemove() {
+        log.warn("Entity was removed");
     }
 
 }
