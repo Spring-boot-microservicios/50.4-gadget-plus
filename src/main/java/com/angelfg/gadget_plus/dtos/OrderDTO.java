@@ -16,8 +16,8 @@ import java.util.List;
 public class OrderDTO {
     private Long id;
 
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss a")
-    private LocalDateTime createdAt = LocalDateTime.now();
+//    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss a")
+//    private LocalDateTime createdAt = LocalDateTime.now();
 
     private String clientName;
     private BillDTO bill;

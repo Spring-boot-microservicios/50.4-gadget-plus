@@ -2,6 +2,7 @@ package com.angelfg.gadget_plus.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 import java.util.HashSet;
@@ -17,6 +18,7 @@ import java.util.Set;
 @Getter
 @Setter
 @ToString
+@Slf4j
 public class OrderEntity {
 
     @Id
@@ -28,6 +30,9 @@ public class OrderEntity {
 
     @Column(length = 32, nullable = false)
     private String clientName;
+
+    @Column(nullable = true)
+    private LocalDateTime lastUpdated;
 
     // OneToOne por defecto es Fetch.EAGER y trae todo
     // Si el OneToOne contiene FetchType.LAZY se genera un error de tipo: LazyInitializationException
@@ -61,6 +66,13 @@ public class OrderEntity {
     @Override
     public int hashCode() {
         return Objects.hashCode(id);
+    }
+
+    // Antes de que guarde puedo cargar datos
+    @PrePersist
+    public void prePersist() {
+        this.setCreatedAt(LocalDateTime.now());
+        log.info("Pre persist {}", this.getCreatedAt().toString());
     }
 
 }
