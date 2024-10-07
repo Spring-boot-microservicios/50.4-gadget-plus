@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
+import java.util.Random;
 
 @Service
 @Slf4j
@@ -29,11 +30,11 @@ public class TransactionServiceImpl implements TransactionService {
         log.info("TRANSACTION ACTIVE 1: {}", TransactionSynchronizationManager.isActualTransactionActive());
         log.info("TRANSACTION NAME 1: {}", TransactionSynchronizationManager.getCurrentTransactionName());
 
-        try {
-            this.updateOrder(id);
-        } catch (Exception e) {}
-
-        this.updateBill("b-3");
+//        try {
+        this.updateOrder(id);
+//        } catch (Exception e) {}
+//
+//        this.updateBill("b-3");
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
@@ -46,20 +47,24 @@ public class TransactionServiceImpl implements TransactionService {
         this.orderRepository.save(order);
 
         this.validProducts(id);
-        // this.updateBill(order.getBill().getId());
+        this.updateBill(order.getBill().getId());
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void updateBill(String id) {
         log.info("TRANSACTION ACTIVE 4: {}", TransactionSynchronizationManager.isActualTransactionActive());
         log.info("TRANSACTION NAME 4: {}", TransactionSynchronizationManager.getCurrentTransactionName());
         final BillEntity bill = this.billRepository.findById(id).orElseThrow();
-        bill.setClientRfc("5678");
+
+        Random random = new Random();
+        int randomNumber = 1000000 + random.nextInt(9000000);
+        log.info("randomNumber: {}", randomNumber);
+        bill.setClientRfc(String.valueOf(randomNumber));
         this.billRepository.save(bill);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.NOT_SUPPORTED)
     @Override
     public void validProducts(Long id) {
         log.info("TRANSACTION ACTIVE 3: {}", TransactionSynchronizationManager.isActualTransactionActive());
@@ -86,5 +91,8 @@ public class TransactionServiceImpl implements TransactionService {
  * Transactional(propagation = Propagation.NESTED) -> SubTransaccion dentro de la transaccion principal (no hay cambios en comportamientos)
  *
  * Transactional(propagation = Propagation.REQUIRES_NEW) -> Se va a generar en transacciones diferentes
+ *
+ * Transactional(propagation = Propagation.NOT_SUPPORTED) -> Transaccion activa pero suspendida porque no genera niguna
+ * modificacion a la DB (Aunque no este soportado, aun asi si falla genera un rollback)
  *
  */
