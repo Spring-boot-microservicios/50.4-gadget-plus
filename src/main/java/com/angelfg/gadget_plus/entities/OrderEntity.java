@@ -34,6 +34,9 @@ public class OrderEntity {
     @Column(nullable = true)
     private LocalDateTime lastUpdated;
 
+    @Transient // Ignora esta propiedad en la DB
+    private Boolean isSaved = false;
+
     // OneToOne por defecto es Fetch.EAGER y trae todo
     // Si el OneToOne contiene FetchType.LAZY se genera un error de tipo: LazyInitializationException
     // Si quiero utilizar el LAZY debo solo utilizar las variables que contiene este modelo y no el de la otra tabla
@@ -73,6 +76,15 @@ public class OrderEntity {
     public void prePersist() {
         this.setCreatedAt(LocalDateTime.now());
         log.info("Pre persist {}", this.getCreatedAt().toString());
+    }
+
+    // Despues de guardar en DB
+    @PostPersist
+    public void postPersist() {
+        this.setCreatedAt(LocalDateTime.now());
+        log.info("Post persist {}", this.getIsSaved());
+        this.setIsSaved(true);
+        log.info("Post persist {}", this.getIsSaved());
     }
 
 }
