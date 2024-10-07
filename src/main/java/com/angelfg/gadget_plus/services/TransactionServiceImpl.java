@@ -7,6 +7,7 @@ import com.angelfg.gadget_plus.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
@@ -24,7 +25,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final OrderRepository orderRepository;
     private final BillRepository billRepository;
 
-    @Transactional
+    @Transactional(isolation = Isolation.SERIALIZABLE)
     @Override
     public void executeTransaction(Long id) {
         log.info("TRANSACTION ACTIVE 1: {}", TransactionSynchronizationManager.isActualTransactionActive());
@@ -94,5 +95,11 @@ public class TransactionServiceImpl implements TransactionService {
  *
  * Transactional(propagation = Propagation.NOT_SUPPORTED) -> Transaccion activa pero suspendida porque no genera niguna
  * modificacion a la DB (Aunque no este soportado, aun asi si falla genera un rollback)
+ *
+ * Transactional(isolation = Isolation.DEFAULT) -> no importa si se modifica o no se modifica
+ * Transactional(isolation = Isolation.READ_UNCOMMITTED) -> Lee antes de que se haga el commit, son transacciones sucias
+ * Transactional(isolation = Isolation.READ_COMMITTED) -> No me va a permitir leer hasta que se hayan hecho los commits en DB para evitar lectura sucia
+ * Transactional(isolation = Isolation.REPEATABLE_READ) -> No se basan en un commit, y siempre en la transaccion tengan el mismo valor
+ * Transactional(isolation = Isolation.SERIALIZABLE) -> Mucha consistencia en los datos en DB mejor que READ_COMMITTED y REPEATABLE_READ
  *
  */
