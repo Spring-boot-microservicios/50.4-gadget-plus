@@ -28,10 +28,15 @@ public class TransactionServiceImpl implements TransactionService {
     public void executeTransaction(Long id) {
         log.info("TRANSACTION ACTIVE 1: {}", TransactionSynchronizationManager.isActualTransactionActive());
         log.info("TRANSACTION NAME 1: {}", TransactionSynchronizationManager.getCurrentTransactionName());
-        this.updateOrder(id);
+
+        try {
+            this.updateOrder(id);
+        } catch (Exception e) {}
+
+        this.updateBill("b-3");
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void updateOrder(Long id) {
         log.info("TRANSACTION ACTIVE 2: {}", TransactionSynchronizationManager.isActualTransactionActive());
@@ -41,20 +46,20 @@ public class TransactionServiceImpl implements TransactionService {
         this.orderRepository.save(order);
 
         this.validProducts(id);
-        this.updateBill(order.getBill().getId());
+        // this.updateBill(order.getBill().getId());
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     @Override
     public void updateBill(String id) {
         log.info("TRANSACTION ACTIVE 4: {}", TransactionSynchronizationManager.isActualTransactionActive());
         log.info("TRANSACTION NAME 4: {}", TransactionSynchronizationManager.getCurrentTransactionName());
         final BillEntity bill = this.billRepository.findById(id).orElseThrow();
-        bill.setClientRfc("RB1234");
+        bill.setClientRfc("5678");
         this.billRepository.save(bill);
     }
 
-    @Transactional(propagation = Propagation.NESTED)
+    @Transactional(propagation = Propagation.REQUIRED)
     @Override
     public void validProducts(Long id) {
         log.info("TRANSACTION ACTIVE 3: {}", TransactionSynchronizationManager.isActualTransactionActive());
@@ -80,5 +85,6 @@ public class TransactionServiceImpl implements TransactionService {
  *
  * Transactional(propagation = Propagation.NESTED) -> SubTransaccion dentro de la transaccion principal (no hay cambios en comportamientos)
  *
+ * Transactional(propagation = Propagation.REQUIRES_NEW) -> Se va a generar en transacciones diferentes
  *
  */
