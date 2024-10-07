@@ -54,7 +54,7 @@ public class TransactionServiceImpl implements TransactionService {
         this.billRepository.save(bill);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
+    @Transactional(propagation = Propagation.NESTED)
     @Override
     public void validProducts(Long id) {
         log.info("TRANSACTION ACTIVE 3: {}", TransactionSynchronizationManager.isActualTransactionActive());
@@ -77,6 +77,8 @@ public class TransactionServiceImpl implements TransactionService {
  * Transactional en metodos es mas importante que la que esta a nivel de clase, lo sobreescribe
  *
  * Transactional(propagation = Propagation.REQUIRED) -> es el default, y trabaja en unica transaccion todos los metodos
+ *
+ * Transactional(propagation = Propagation.NESTED) -> SubTransaccion dentro de la transaccion principal (no hay cambios en comportamientos)
  *
  *
  */
